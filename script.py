@@ -15,7 +15,7 @@ import loguru
 
 def scrape_data_point():
     """
-    Scrapes the main headline from The Daily Pennsylvanian home page.
+    Scrapes the main headline from the 34th Street Magazine home page.
 
     Returns:
         str: The headline text if found, otherwise an empty string.
@@ -23,14 +23,14 @@ def scrape_data_point():
     headers = {
         "User-Agent": "cis3500-scraper"
     }
-    req = requests.get("https://www.thedp.com", headers=headers)
+    req = requests.get("https://www.34st.com", headers=headers)
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
 
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("a", class_="frontpage-link")
-        data_point = "" if target_element is None else target_element.text
+        target_element = soup.find("a", class_="headline-link")
+        data_point = "" if target_element is None else target_element.text.strip()
         loguru.logger.info(f"Data point: {data_point}")
         return data_point
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # Load daily event monitor
     loguru.logger.info("Loading daily event monitor")
     dem = daily_event_monitor.DailyEventMonitor(
-        "data/daily_pennsylvanian_headlines.json"
+        "data/34st_magazine_headlines.json"
     )
 
     # Run scrape
